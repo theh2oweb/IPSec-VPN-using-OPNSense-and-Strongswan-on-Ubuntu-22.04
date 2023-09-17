@@ -1,12 +1,7 @@
 # IPSec VPN using OPNSense and Strongswan (on Ubuntu 22.04)
 
-## Table of content
-
-1. [Mobile client / Roadwarrior example](#mobile-client-/-roadwarrior-example)
-2. [VPN Peer](#vpn-peer)
-
 ## Mobile client / Roadwarrior example
-Reference: [Strongswan VPN - Roadwarrior case with virtual IP](https://docs.strongswan.org/docs/5.9/config/quickstart.html#_roadwarrior_case_with_virtual_ip)
+Reference: [Strongswan VPN - Roadwarrior case with Virtual IP](https://docs.strongswan.org/docs/5.9/config/quickstart.html#_roadwarrior_case_with_virtual_ip)
 
 The main objective is to allow a mobile user/client (aka RoadWarrior) to remotely access ressource on a secured private network.  
 In this example, the user is using a laptop connected to Internet.  
@@ -20,26 +15,26 @@ ttt.ttt.ttt.ttt/tt --|-- ggg.ggg.ggg.ggg > ==[ INTERNET ]== < ppp.ppp.ppp.ppp ( 
                          [================== IPSec Tunnel ==================]
 ```
 The generic process is:
-1. User connects his laptop, the `VPN PEER`, to his local network in order to obtain Internet access.
-2. `VPN PEER` instanciates an `IPSec Tunnel` with the `VPN GATEWAY`.  
+1. User connects his laptop, the `VPN peer`, to his local network in order to obtain Internet access.
+2. `VPN peer` instanciates an `IPSec Tunnel` with the `VPN gateway`.  
     2.1. `ppp.ppp.ppp.ppp` establishes an `IPSec Tunnel` with `ggg.ggg.ggg.ggg`.  
-    2.2. `VPN PEER` creates a `VIRTUAL IP vvv.vvv.vvv.vvv/vv`, to be used in the `IPSec Tunnel` to communicate with the `TARGET NETWORK`.  
-    2.3. `VPN PEER` adds a route for the `TARGET NETWORK ttt.ttt.ttt.ttt/tt` pointing to its `VIRTUAL IP vvv.vvv.vvv.vvv/vv`.  
-3. The `VPN PEER` can access the `TARGET NETWORK` to send and retrieve datas.  
+    2.2. `VPN peer` creates a `Virtual IP vvv.vvv.vvv.vvv/vv`, to be used in the `IPSec Tunnel` to communicate with the `Target network`.  
+    2.3. `VPN peer` adds a route for the `Target network ttt.ttt.ttt.ttt/tt` pointing to its `Virtual IP vvv.vvv.vvv.vvv/vv`.  
+3. The `VPN peer` can access the `Target network` to send and retrieve datas.  
 
 ## VPN Gateway
 `Current version of OPNSense is 23.7.2` _(September 17th, 2023)_  
 
 In this section, we will:
-1. Create a CA authority on the `VPN Gateway`  
-    1.1. Create a certificate for the `VPN Gateway`  
-    1.2. Create a certificate for the `VPN Peer`  
+1. Create a CA authority on the `VPN gateway`  
+    1.1. Create a certificate for the `VPN gateway`  
+    1.2. Create a certificate for the `VPN peer`  
 2. Create a `VPN Tunnel` configuration  
-    2.1. Configure `VPN Gateway`'s IPSec Phase 1  
-    2.2. Configure `VPN Gateway`'s IPSec Phase 2  
+    2.1. Configure `VPN gateway`'s IPSec Phase 1  
+    2.2. Configure `VPN gateway`'s IPSec Phase 2  
 3. Start the VPN Tunnel listener  
 
-### Create a Certificate Authority (CA) on the VPN Gateway (OPNSense)
+### Create a Certificate Authority (CA) on the VPN gateway (OPNSense)
 * Go to __System > Trust > Authorities__.
 * Click the __Add__ button.
 
@@ -95,7 +90,7 @@ IP                                                                  <Enter your 
 ```
 * Click __Save__ button.
 
-## Configure VPN Gateway's IPSec Phase 1
+### Configure VPN Gateway's IPSec Phase 1
 * Go to __VPN > IPSec > Mobile clients__  
 
 Enter/select the following values:
@@ -111,9 +106,9 @@ IKE Extensions
 Enable IPSec Mobile Clients Support:                                <check the box>
 
 Client Configuration (mode-cfg)
-Provide a virtual IPv4 address to clients:                          <check the box>
+Provide a Virtual IPv4 address to clients:                          <check the box>
                                                                     <Enter your value, ex: vvv.vvv.vvv.vvv/vv>
-Provide a virtual IPv6 address to clients:                          <leave the box unchecked>
+Provide a Virtual IPv6 address to clients:                          <leave the box unchecked>
 Provide a list of accessible networks to clients:                   <leave the box unchecked>
 Allow clients to save Xauth passwords (Cisco VPN client only):      <leave the box unchecked>
 Provide a default domain name to clients:                           <leave the box unchecked>
@@ -167,7 +162,7 @@ Margintime                                                          <leave empty
 Rekeyfuzz:                                                          <leave empty>
 ```
 
-## Configure VPN Gateway's IPSec Phase 2
+### Configure VPN Gateway's IPSec Phase 2
 * Go to __VPN > IPSec > Tunnel Settings [legacy]  
 * Click on the __Add__ button next to the created Phase 1  
 
@@ -197,7 +192,7 @@ Automatically ping host:                                            <leave empty
 * Check the __Enable IPSec__ checkbox.  
 * Click on the __Apply changes__ button.  
 
-## Configure firewall rules
+### Configure firewall rules
 To accept IPSec connection and allow tunnel communication.  
 * Go to __Firewall > Rules > \<your interface\> >  
 * Click on the __Add__ button.  
@@ -221,7 +216,7 @@ In this section, we will:
 2. Configure the `IPSec Tunnel` connection.
 3. Establish a VPN connection.
 
-### System packages installation.
+### Strongswan packages installation
 ```shell
 apt install charon-systemd strongswan-swanctl
 ```
@@ -236,16 +231,14 @@ Each package will also install the following dependancies:
     * libstrongswan-standard-plugins (strongSwan utility and crypto library (standard plugins))
     * strongswan-swanctl (strongSwan IPsec client, swanctl command)
 
-### Strongswan configuration
-
-#### __Authentication configuration__
+### Strongswan authentication configuration
 Copy the provided certificates to the following directories.
 ```text
 /etc/swanctl/x509ca/<peer>-CA.crt
 /etc/swanctl/x509/<peer>.crt
 /etc/swanctl/private/<peer>.key
 ```  
-#### __IPSec tunnel configuration__
+### Strongswan tunnel configuration
 Create a `swanctl` configuration file in __/etc/swanctl/conf.d/\<peer\>.conf__
 ```ini
 connections{
@@ -436,7 +429,7 @@ echo "" >> ${LOGFILE} 2>&1
 echo -e "\n###" $(date +"%Y-%m-%d %H:%M:%S") "END OF ${0} for ${PLUTO_VERB} ###\n" >> ${LOGFILE} 2>&1
 ```
 
-### Monitor Strongswan IPSec tunnel activity
+### Strongswan IPSec tunnel monitoring
 ```shell
 watch -d "swanctl --list-sas"
 ```
