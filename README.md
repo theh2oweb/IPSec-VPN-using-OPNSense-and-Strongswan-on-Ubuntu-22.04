@@ -261,7 +261,7 @@ connections{
 				esp_proposals = aes256-sha256-modp2048
 				# https://docs.strongswan.org/docs/5.9/swanctl/swanctlConf.html#_connections_conn_children
 				local_ts = dynamic
-				remote_ts = dynamic
+				remote_ts = 0.0.0.0/0
 				start_action = start
 				close_action = start
 				dpd_action = restart
