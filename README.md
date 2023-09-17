@@ -202,7 +202,7 @@ Protocol	Source	                Port	Destination	            Port	            Ga
 IPv4 ESP	*	                    *	    ggg.ggg.ggg.ggg/gg	    *	                *	        *		    Allow IPSec ESP
 IPv4 UDP	*	                    *	    ggg.ggg.ggg.ggg/gg	    500 (ISAKMP)	    *	        *		    Allow IPSec ISAKMP
 IPv4 UDP	*	                    *	    ggg.ggg.ggg.ggg/gg	    4500 (IPsec NAT-T)	*	        *		    Allow IPSec NAT-T
-IPv4 *	    vvv.vvv.vvv.vvv/vv	    *	    ttt.ttt.ttt.ttt/tt	    *	                *	        *		    Allow Secured communication
+IPv4 *	        vvv.vvv.vvv.vvv/vv	    *	    ttt.ttt.ttt.ttt/tt	    *	                *	        *		    Allow Secured communication
 ```
 __`TO BE COMPLETED`__
 
