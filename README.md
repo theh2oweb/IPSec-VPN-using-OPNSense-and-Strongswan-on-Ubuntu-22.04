@@ -346,9 +346,9 @@ log_env () {
     echo "" >> ${LOGFILE} 2>&1
     echo "### LOGGING ENVIRONMENT ###" >> ${LOGFILE} 2>&1
     env >> ${LOGFILE} 2>&1
-    # PLUTO_PEER_ID=vpn.gateway.tld
-    # PLUTO_ME=ppp.ppp.ppp.ppp
-    # PLUTO_PEER_CLIENT=ggg.ggg.ggg.ggg/gg
+    # PLUTO_PEER_ID=C=xx, ST=xx, L=xx, O=xx, E=xxx@yyy.tld, CN=xxx
+    # PLUTO_ME=ppp.ppp.ppp.ppp (private IP)
+    # PLUTO_PEER_CLIENT=ttt.ttt.ttt.ttt/tt
     # PWD=/
     # PLUTO_VERSION=1.1
     # PLUTO_REQID=1
