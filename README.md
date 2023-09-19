@@ -284,6 +284,7 @@ systemctl stop strongswan && systemctl start strongswan
 Even if `strongswan` can use a P12 certificate, it's normally secured by a password.  
 You can use the following script to extract the CA, cert and key from the P12 certificate.  
 
+__`NB: Required OpenSSL version 3 at least.`__
 __`NB: It is insecure to leave the certificate key without a password. Another solution may exists with strongswan.`__
 ```bash
 #!/bin/bash
